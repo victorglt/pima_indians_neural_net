@@ -8,7 +8,7 @@ from keras import losses
 
 model = Sequential()
 
-(x_train, y_train), (x_test, y_test) = pima.load_data(test_percentage=0.3)
+(x_train, y_train), (x_test, y_test) = pima.load_data(test_percentage=0.1)
 
 print "X Train Data Shape: " + str(x_train.shape)
 print "Y Train Data Shape: " + str(y_train.shape)
