@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
-
-
+import seaborn as sns
+import matplotlib.pyplot as plt 
 def load_data(path = 'diabetes.csv', test_percentage=0.5, relevant_rows=["Pregnancies" , "PlasmaGlucose", "DiastolicBloodPressure", "TricepsThickness" , "SerumInsulin", "BMI", "DiabetesPedigree" , "Age" , "Diabetic"]):
     """ Loads the Pima Indians diabetes dataset 
         # Returns
@@ -24,5 +24,14 @@ def load_data(path = 'diabetes.csv', test_percentage=0.5, relevant_rows=["Pregna
     x_train = train_dataset.drop(columns=["Diabetic"]) 
     x_test = test_dataset.drop(columns=["Diabetic"])
     
+   
+    x_train -= x_train.mean(axis=0)
+    x_train /= x_train.std(axis=0)
+
+    x_test -= x_train.mean(axis=0)
+    x_test /= x_test.std(axis=0)
+
     return (x_train.values, y_train.values),(x_test.values, y_test.values)
 
+
+    

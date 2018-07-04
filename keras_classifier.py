@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from keras import optimizers
 from keras import metrics 
 from keras import losses
-
+import numpy as np
 model = Sequential()
 
 (x_train, y_train), (x_test, y_test) = pima.load_data(test_percentage=0.1)
@@ -18,14 +18,13 @@ print "Y Test Data Shape: " + str(y_test.shape)
 print x_train
 print y_train 
 
+
 model = Sequential()
 
-model.add(Dense(16, activation='relu', input_dim=8))
+model.add(Dense(32, activation='relu', input_dim=8))
 
 # Add fully connected layer with a ReLU activation function
-model.add(Dense(16, activation='relu'))
-
-model.add(Dense(16, activation='relu'))
+model.add(Dense(32, activation='relu'))
 
 # Add fully connected layer with a sigmoid activation function
 model.add(Dense(units=1, activation='sigmoid'))
@@ -54,6 +53,8 @@ loss = history.history['loss']
 val_loss = history.history['val_loss']
 
 epochs = range(1, len(acc) + 1)
+
+plt.clf()
 
 # "bo" is for "blue dot"
 plt.plot(epochs, loss, 'bo', label='Training loss')
