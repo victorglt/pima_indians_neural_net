@@ -2,22 +2,48 @@ import pimaindians_dataset as pima
 from keras.models import Sequential
 from keras.layers import Dense
 import matplotlib.pyplot as plt
-from keras import optimizers
-from keras import metrics 
-from keras import losses
-import numpy as np
+
+
+def display_accuracy_graph(training_acc, validation_acc):
+    plt.clf()
+
+    epochs = range(1, len(training_acc) + 1)
+
+    plt.plot(epochs, training_acc, 'bo', label='Training acc')
+    plt.plot(epochs, validation_acc, 'b', label='Validation acc')
+    plt.title('Training and validation accuracy')
+    plt.xlabel('Epochs')
+    plt.ylabel('Loss')
+    plt.legend()
+
+    plt.show()
+
+def display_loss_graph(training_loss, validation_loss):
+    plt.clf()
+
+    epochs = range(1, len(training_loss) + 1)
+
+    plt.plot(epochs, training_loss, 'bo', label='Training loss')
+    plt.plot(epochs, validation_loss, 'b', label='Validation loss')
+    plt.title('Training and validation loss')
+    plt.xlabel('Epochs')
+    plt.ylabel('Loss')
+    plt.legend()
+
+    plt.show()
+
+
+def show_metrics(history):
+    history_dict = history.history
+    history_dict.keys()
+
+    display_loss_graph(history.history['loss'], history.history['val_loss'])
+    display_accuracy_graph(history.history['acc'], history.history['val_acc'])
+
+
 model = Sequential()
 
 (x_train, y_train), (x_test, y_test) = pima.load_data(test_percentage=0.1)
-
-print "X Train Data Shape: " + str(x_train.shape)
-print "Y Train Data Shape: " + str(y_train.shape)
-print "X Test Data Shape: " + str(x_test.shape)
-print "Y Test Data Shape: " + str(y_test.shape)
-
-print x_train
-print y_train 
-
 
 model = Sequential()
 
@@ -40,43 +66,7 @@ history = model.fit(x_train,
                     batch_size=512,
                     validation_data=(x_test, y_test))
 
+model.save('diabetes_model.h5')
 
-print model.predict(x_test)
-
-
-history_dict = history.history
-history_dict.keys()
-
-acc = history.history['acc']
-val_acc = history.history['val_acc']
-loss = history.history['loss']
-val_loss = history.history['val_loss']
-
-epochs = range(1, len(acc) + 1)
-
-plt.clf()
-
-# "bo" is for "blue dot"
-plt.plot(epochs, loss, 'bo', label='Training loss')
-# b is for "solid blue line"
-plt.plot(epochs, val_loss, 'b', label='Validation loss')
-plt.title('Training and validation loss')
-plt.xlabel('Epochs')
-plt.ylabel('Loss')
-plt.legend()
-
-plt.show()
-
-plt.clf()   # clear figure
-acc_values = history_dict['acc']
-val_acc_values = history_dict['val_acc']
-
-plt.plot(epochs, acc, 'bo', label='Training acc')
-plt.plot(epochs, val_acc, 'b', label='Validation acc')
-plt.title('Training and validation accuracy')
-plt.xlabel('Epochs')
-plt.ylabel('Loss')
-plt.legend()
-
-plt.show()
+show_metrics(history)
 
