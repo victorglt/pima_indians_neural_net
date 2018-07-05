@@ -19,9 +19,11 @@ def get_diabetes_prediction():
         diastolicBloodPressure = request.args.get('diastolic_blood_pressure')
         tricepsThickness = request.args.get('triceps_thickness')
         serumInsulin = request.args.get('serum_insulin')
+        bmi = request.args.get('bmi')
+        diabetesPedigree = request.args.get('diabetes_pedigree')
         age = request.args.get('age')
 
-        data = np.matrix([[0, 1, 0, 1, 0, 0, 1, 1]])
+        data = np.matrix([[pregnancies, plasmaGlucose, diastolicBloodPressure, tricepsThickness, serumInsulin, bmi, diabetesPedigree, age]])
 
         prediction =  model.predict(data)
 
