@@ -41,9 +41,9 @@ def show_metrics(history):
     display_accuracy_graph(history.history['acc'], history.history['val_acc'])
 
 
-model = Sequential()
-
 (x_train, y_train), (x_test, y_test) = pima.load_data(test_percentage=0.1)
+
+print x_test.shape
 
 model = Sequential()
 
@@ -67,6 +67,8 @@ history = model.fit(x_train,
                     validation_data=(x_test, y_test))
 
 model.save('diabetes_model.h5')
+
+print model.predict(x_test)
 
 show_metrics(history)
 
