@@ -11,7 +11,7 @@ model = load_model('diabetes_model.h5')
 global graph
 graph = tf.get_default_graph()
 
-@app.route("/diabetes/prediction")
+@app.route("/diabetes/prediction", methods=[ 'POST' ])
 def get_diabetes_prediction():
     with graph.as_default():
         pregnancies = request.args.get('pregnancies')

@@ -1,5 +1,14 @@
 import pandas as pd
 
+def normalize(x_train, x_test):
+    mean = x_train.mean(axis=0)
+    x_train -= mean
+    std = x_train.std(axis=0)
+    x_train /= std
+
+    x_test -= mean
+    x_test /= std
+
 
 def load_data(path='diabetes.csv', test_percentage=0.5,
               relevant_rows=None):
@@ -28,10 +37,7 @@ def load_data(path='diabetes.csv', test_percentage=0.5,
     x_train = train_dataset.drop(columns=["Diabetic"])
     x_test = test_dataset.drop(columns=["Diabetic"])
 
-    x_train -= x_train.mean(axis=0)
-    x_train /= x_train.std(axis=0)
-
-    x_test -= x_train.mean(axis=0)
-    x_test /= x_test.std(axis=0)
+    #Normalize features to a mean
+    normalize(x_train, x_test)
 
     return (x_train.values, y_train.values), (x_test.values, y_test.values)
