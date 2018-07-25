@@ -1,17 +1,27 @@
 # Keras classifier on the [Pima Indians Dataset](https://www.kaggle.com/uciml/pima-indians-diabetes-database)
 
+Neural network for diabetes disease classification,
+
 ## Training the classifier
 
 ```
-python keras_classifier.py
-
+python keras_classifier.py --graph
 ```
+Model is saves as .h5 file in the current folder
 
-## Using the api
+--graph option shows metric graphs at each K-Fold step (default 4)
+
+![](./graph.png)
+
+## Predict
+
+An REST api is provided
 
 ``` 
-python diabetes_web.py
+FLASK_APP=diabetes_web.py flask run
 ```
+
+POST 
 
 
 

@@ -1,8 +1,9 @@
+import argparse
 import pimaindians_dataset as pima
-from keras.models import Sequential
-from keras.layers import Dense
 import matplotlib.pyplot as plt
 import numpy as np
+from keras.models import Sequential
+from keras.layers import Dense
 from sklearn.model_selection import StratifiedKFold
 
 
@@ -42,10 +43,10 @@ def show_metrics(history):
 def build_model():
     model = Sequential()
 
-    model.add(Dense(64, activation='relu', input_dim=8))
+    model.add(Dense(16, activation='relu', input_dim=8))
 
     # Add fully connected layer with a ReLU activation function
-    model.add(Dense(64, activation='relu'))
+    model.add(Dense(16, activation='relu'))
 
     # Add fully connected layer with a sigmoid activation function
     model.add(Dense(units=1, activation='sigmoid'))
@@ -56,7 +57,7 @@ def build_model():
     return model
 
 
-def k_fold_train(model, x_train, y_train, show_metric_graphs=False):
+def k_fold_train(model, x_train, y_train, show_metric_graphs=True):
     kfold = StratifiedKFold(n_splits=4, shuffle=True, random_state=128)
 
     k_fold_accuracies = []
@@ -77,11 +78,16 @@ def k_fold_train(model, x_train, y_train, show_metric_graphs=False):
             show_metrics(history)
     return (np.mean(k_fold_accuracies), np.std(k_fold_accuracies))
 
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--graphs", help="Display metrics graphs at each K-Fold iteration", action="store_true")
+args = parser.parse_args()
+
 #test_percentage set to 0 as to load the full data. Splitting will be done by K-Fold
 (x_train, y_train), (x_test, y_test) = pima.load_data(test_percentage=0)
 
 model = build_model()
-(mean_acc, std_deviation) = k_fold_train(model, x_train, y_train)
+(mean_acc, std_deviation) = k_fold_train(model, x_train, y_train, args.graphs)
 
 print "Your model has acc of: " + str(mean_acc * 100) + "% with a standard deviation of: " + str(std_deviation * 100) + "%"
 
