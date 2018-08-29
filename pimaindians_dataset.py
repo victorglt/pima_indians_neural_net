@@ -37,7 +37,7 @@ def load_data(path='diabetes.csv', test_percentage=0.5,
     x_train = train_dataset.drop(columns=["Diabetic"])
     x_test = test_dataset.drop(columns=["Diabetic"])
 
-    #Normalize features to a mean
+    # Normalize features to a mean
     normalize(x_train, x_test)
 
     return (x_train.values, y_train.values), (x_test.values, y_test.values)

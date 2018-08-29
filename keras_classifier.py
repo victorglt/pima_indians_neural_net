@@ -5,7 +5,9 @@ import numpy as np
 from keras.models import Sequential
 from keras.layers import Dense
 from sklearn.model_selection import StratifiedKFold
+from keras.models import load_model
 
+DEFAULT_MODEL_NAME = "diabetes_model.h5"
 
 def display_accuracy_graph(training_acc, validation_acc):
     epochs = range(1, len(training_acc) + 1)
@@ -79,16 +81,37 @@ def k_fold_train(model, x_train, y_train, show_metric_graphs=True):
     return (np.mean(k_fold_accuracies), np.std(k_fold_accuracies))
 
 
+def infer(parameters, model_name):
+    if model_name == None:
+        model_name = DEFAULT_MODEL_NAME
+    model = load_model(model_name)
+    return model.predict(parameters)
+
 parser = argparse.ArgumentParser()
+parser.add_argument("--train", help="Trains the network", action="store_true")
 parser.add_argument("--graphs", help="Display metrics graphs at each K-Fold iteration", action="store_true")
+parser.add_argument("--predict", help="Predicts from saved model", action="store_true")
+parser.add_argument("--model", help="Name of the mode to do prediction", metavar="M", nargs=1, dest="model_name", action="store")
+
 args = parser.parse_args()
 
-#test_percentage set to 0 as to load the full data. Splitting will be done by K-Fold
-(x_train, y_train), (x_test, y_test) = pima.load_data(test_percentage=0)
+if args.train:
+    (x_train, y_train), (x_test, y_test) = pima.load_data(test_percentage=0)
+    (mean_acc, std_deviation) = k_fold_train(build_model(), x_train, y_train, args.graphs)     
+    print("Your model has acc of: " + str(mean_acc * 100) + "% with a standard deviation of: " + str(std_deviation * 100) + "%")
+if args.predict:
+    console_input = input("Prediction Input, space separated:")
+    prediction_input = np.array([console_input.split(" ")])    
+    prediction_result = infer(prediction_input, args.model_name)
+    print("The prediction for: " + str(prediction_input) + " is: " + str(prediction_result))
 
-model = build_model()
-(mean_acc, std_deviation) = k_fold_train(model, x_train, y_train, args.graphs)
 
-print "Your model has acc of: " + str(mean_acc * 100) + "% with a standard deviation of: " + str(std_deviation * 100) + "%"
 
-model.save("diabetes_model.h5")
+
+
+
+
+
+
+
+
